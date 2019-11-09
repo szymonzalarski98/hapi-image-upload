@@ -1,6 +1,6 @@
 'use strict';
 
-const Hapi = require('@hapi/hapi');
+const Hapi = require('hapi');
 const Inert = require('inert');
 const routes = require('./routes/index'); 
 const mongoose = require('mongoose');
@@ -19,15 +19,15 @@ mongoose.connection.on('error', (err) => {
   console.log('Error while connecting to mongodb', err);
 });
 
-const init= async () => {
-  const server = Hapi.server({
-    port: 3001,
-    host: 'localhost'
-  });
+const server = new Hapi.Server({
+  host: 'localhost',
+  port: 3001,
+});
+
+const init = async () => {
   await server.register(Inert);
   server.route(routes);
   await server.start();
-  console.log(`Server running on port: ${server.info.uri}`);
 }
 
 process.on('unhandledRejection', (err) => {
@@ -36,3 +36,25 @@ process.on('unhandledRejection', (err) => {
 });
 
 init();
+
+// const server = Hapi.server({
+//   port: 3001,
+//   host: 'localhost'
+// });
+
+
+// const init= async () => {
+//   await server.register(Inert);
+//   server.route(routes);
+//   await server.start();
+//   console.log(`Server running on port: ${server.info.uri}`);
+// }
+
+// process.on('unhandledRejection', (err) => {
+//   console.log(err);
+//   process.exit(1);
+// });
+
+// init();
+
+// module.exports = server;
