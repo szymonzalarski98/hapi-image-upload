@@ -1,16 +1,25 @@
 const fs = require('fs');
+const cuid  = require('cuid');
+const File = require('../models/file.model');
 
 const handleFileUpload = file  => {
   return new Promise((resolve, reject) => {
-    const filename = file.hapi.filename
-    const data = file._data
-    fs.writeFile('./upload/' + filename, data, err => {
+    const fileName = file.hapi.filename;
+    const data = file._data;
+    let fileId = cuid();
+    let date = new Date();
+    fs.writeFile(`./upload/${fileId}.png`, data, err => {
       if (!err) {
         reject(err);
       }
       resolve({ message: 'Upload successfully!' });
-    })
-  })
+      File.create({
+        fileName,
+        fileId,
+        date,
+      });
+    });
+  });
 };
 
 const postImage = {
