@@ -26,6 +26,16 @@ const postImage = {
     const response = handleFileUpload(payload.file);
     return response;
   }
+};
+
+const getImage = {
+  method: 'GET',
+  path: '/upload/{file*}',
+  handler: {
+    directory: {
+      path: 'upload'
+    }
+  }
 }
 
-module.exports = postImage;
+module.exports = [postImage, getImage];
